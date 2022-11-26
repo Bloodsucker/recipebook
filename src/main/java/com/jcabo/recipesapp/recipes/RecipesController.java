@@ -4,13 +4,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-
 @RestController
 @RequestMapping(path="/recipes")
 public class RecipesController {
@@ -28,7 +21,7 @@ public class RecipesController {
     }
 
     @GetMapping("/{id}")
-    EntityModel<Recipe> one(@PathVariable Long id) {
+    public EntityModel<Recipe> one(@PathVariable Long id) {
         Recipe recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException(id));
 
@@ -36,7 +29,7 @@ public class RecipesController {
     }
 
     @PostMapping("/")
-    Recipe newOne(@RequestBody Recipe newRecipe) {
+    public Recipe newOne(@RequestBody Recipe newRecipe) {
         return recipesRepository.save(newRecipe);
     }
 }

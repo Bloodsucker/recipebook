@@ -1,9 +1,9 @@
 package com.jcabo.recipesapp.recipes;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.*;
+import com.jcabo.recipesapp.users.User;
+
+import javax.persistence.*;
 
 @Entity
 public class Recipe {
@@ -12,6 +12,18 @@ public class Recipe {
     private Long id;
     private boolean vegetarian;
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "fk_recipe_owner"))
+    @JsonBackReference
+    private User owner;
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
     Recipe(boolean vegetarian, String description) {
         this.vegetarian = vegetarian;

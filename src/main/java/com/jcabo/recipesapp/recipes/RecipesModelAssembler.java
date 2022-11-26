@@ -1,5 +1,6 @@
 package com.jcabo.recipesapp.recipes;
 
+import com.jcabo.recipesapp.users.UserController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class RecipesModelAssembler implements RepresentationModelAssembler<Recip
     public EntityModel<Recipe> toModel(Recipe recipe) {
         return EntityModel.of(recipe,
                 linkTo(methodOn(RecipesController.class).one(recipe.getId())).withSelfRel(),
-                linkTo(methodOn(RecipesController.class).all()).withRel("recipes"));
+                linkTo(methodOn(RecipesController.class).all()).withRel("recipes"),
+                linkTo(methodOn(UserController.class).getById(recipe.getOwner().getId())).withRel("owner"));
     }
 }
