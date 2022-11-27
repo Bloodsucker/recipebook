@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jcabo.recipesapp.users.User;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,9 +21,8 @@ public class Recipe {
     private boolean vegetarian;
     private String description;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "fk_recipe_owner"))
-    @JsonIgnore
     private User owner;
 
     Recipe(boolean vegetarian, String description) {

@@ -4,8 +4,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping(path="/recipes")
 public class RecipesController {
     private final RecipesRepository recipesRepository;
     private final RecipesModelAssembler recipesModelAssembler;

@@ -19,8 +19,15 @@ public class User {
     private Long id;
 
     @OneToMany(mappedBy = "owner")
-    @JsonIgnore
     private List<Recipe> ownedRecipes;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favourite_recipes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
+    private List<Recipe> favouriteRecipes;
 
     public List<Recipe> getOwnedRecipes() {
         return ownedRecipes;
