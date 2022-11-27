@@ -14,8 +14,8 @@ public class RecipesModelAssembler implements RepresentationModelAssembler<Recip
     @Override
     public EntityModel<Recipe> toModel(Recipe recipe) {
         return EntityModel.of(recipe,
-                linkTo(methodOn(RecipesController.class).one(recipe.getId())).withSelfRel(),
-                linkTo(methodOn(RecipesController.class).all()).withRel("recipes"),
+                linkTo(methodOn(RecipesController.class).getById(recipe.getId())).withSelfRel(),
+                linkTo(methodOn(RecipesController.class).getAll()).withRel("recipes"),
                 linkTo(methodOn(UserController.class).getById(recipe.getOwner().getId())).withRel("owner"));
     }
 }

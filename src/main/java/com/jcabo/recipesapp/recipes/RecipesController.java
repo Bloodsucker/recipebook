@@ -16,12 +16,12 @@ public class RecipesController {
     }
 
     @GetMapping(path = "/")
-    public CollectionModel<EntityModel<Recipe>> all() {
+    public CollectionModel<EntityModel<Recipe>> getAll() {
         return recipesModelAssembler.toCollectionModel(recipesRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public EntityModel<Recipe> one(@PathVariable Long id) {
+    public EntityModel<Recipe> getById(@PathVariable Long id) {
         Recipe recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException(id));
 
