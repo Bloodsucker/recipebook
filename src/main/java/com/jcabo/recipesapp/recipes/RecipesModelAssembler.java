@@ -1,6 +1,7 @@
 package com.jcabo.recipesapp.recipes;
 
 import com.jcabo.recipesapp.users.UserController;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

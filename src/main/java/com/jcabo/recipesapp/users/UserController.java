@@ -6,6 +6,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
@@ -21,8 +24,10 @@ public class UserController {
     }
 
     @PostMapping("/")
-    User newOne(@RequestBody User newUser) {
-        return usersRepository.save(newUser);
+    EntityModel<User> newOne(@RequestBody User newUser) {
+        User user = usersRepository.save(newUser);
+
+        return userModelAssembler.toModel(user);
     }
 
     @GetMapping("/{id}")
@@ -38,6 +43,7 @@ public class UserController {
         User user = usersRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        return recipesModelAssembler.toCollectionModel(user.getOwnedRecipes());
+        return recipesModelAssembler.toCollectionModel(user.getOwnedRecipes())
+                .add(linkTo(methodOn(UserController.class).ownedRecipes(user.getId())).withSelfRel());
     }
 }

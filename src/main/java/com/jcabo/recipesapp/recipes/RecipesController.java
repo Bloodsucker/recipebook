@@ -29,7 +29,9 @@ public class RecipesController {
     }
 
     @PostMapping("/")
-    public Recipe newOne(@RequestBody Recipe newRecipe) {
-        return recipesRepository.save(newRecipe);
+    public EntityModel<Recipe> create(@RequestBody Recipe newRecipe) {
+        Recipe recipe = recipesRepository.save(newRecipe);
+
+        return recipesModelAssembler.toModel(recipe);
     }
 }
