@@ -2,7 +2,7 @@ package com.jcabo.recipesapp.recipes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesRepositoryCustomImpl implements RecipesRepositoryCustom {
@@ -11,23 +11,59 @@ public class RecipesRepositoryCustomImpl implements RecipesRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Recipe> custom(Boolean vegetarian, String description) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Recipe> query = cb.createQuery(Recipe.class);
-        Root<Recipe> recipe = query.from(Recipe.class);
+    public List<Recipe> filter(Boolean vegetarian, String withInstructions, String withIngredients, String includeIngredients, String excludeIngredients) {
+        List<String> conjunctionPredicates = new ArrayList<>();
 
-        Path<Boolean> vegetarianPath = recipe.get("vegetarian");
+        if (vegetarian != null) {
+            conjunctionPredicates.add(String.format("r.vegetarian IS %s", vegetarian ? "TRUE" : "NOT TRUE"));
+        }
 
-//        List<Predicate> predicates = new ArrayList<>();
-//        for (String email : emails) {
-//            predicates.add(cb.like(emailPath, email));
-//        }
-        query.select(recipe)
-                .where(cb.equal(vegetarianPath, vegetarian));
-//                .where(cb.isTrue());
-//                .where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+        if(withInstructions != null) {
+            for (String wordInInstructions : withInstructions.split(",")) {
+                conjunctionPredicates.add(String.format("r.instructions LIKE '%%%s%%'", wordInInstructions));
+            }
+        }
 
-        return entityManager.createQuery(query)
-                .getResultList();
+        if(includeIngredients != null) {
+            List<String> includeIngredientsPredicates = new ArrayList<>();
+            for (String includeIngredient : includeIngredients.split(",")) {
+                includeIngredientsPredicates.add(String.format("i.name LIKE '%s'", includeIngredient));
+            }
+
+            String includeIngredientsJql = String.join(" OR ", includeIngredientsPredicates);
+
+            String jql = "r.id IN (SELECT rhi.recipe.id FROM RecipesHasIngredients rhi JOIN Ingredient i ON rhi.ingredient.id = i.id" +
+                    " WHERE rhi.recipe.id = r.id AND (" + includeIngredientsJql + ")" +
+                    " GROUP BY rhi.recipe.id " +
+                    " HAVING count(distinct rhi.ingredient.id) = " + includeIngredientsPredicates.size() +
+                    ")";
+
+            conjunctionPredicates.add(jql);
+        }
+
+        if(excludeIngredients != null) {
+            List<String> predicates = new ArrayList<>();
+            for (String includeIngredient : excludeIngredients.split(",")) {
+                predicates.add(String.format("i.name LIKE '%s'", includeIngredient));
+            }
+
+            String disjunctionJql = String.join(" OR ", predicates);
+
+            String jql = "r.id NOT IN (SELECT rhi.recipe.id FROM RecipesHasIngredients rhi JOIN Ingredient i ON rhi.ingredient.id = i.id" +
+                    " WHERE rhi.recipe.id = r.id AND (" + disjunctionJql + ")" +
+                    " GROUP BY rhi.recipe.id " +
+                    " HAVING count(distinct rhi.ingredient.id) = " + predicates.size() +
+                    ")";
+
+            conjunctionPredicates.add(jql);
+        }
+
+        String jql = "SELECT r FROM Recipe r";
+
+        if(conjunctionPredicates.size() > 0) {
+            jql += " WHERE " + String.join(" AND ", conjunctionPredicates);
+        }
+
+        return entityManager.createQuery(jql, Recipe.class).getResultList();
     }
 }

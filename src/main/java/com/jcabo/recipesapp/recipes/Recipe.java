@@ -23,7 +23,9 @@ public class Recipe {
     private Long id;
 
     private boolean vegetarian;
-    private String description;
+
+    @Column(columnDefinition = "TEXT")
+    private String instructions;
 
     @ManyToOne(optional = false)
     private User owner;

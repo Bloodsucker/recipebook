@@ -28,9 +28,6 @@ public class Ingredient {
 
     private Boolean isVegetarian;
 
-    @Column(columnDefinition = "TEXT")
-    private String instructions;
-
     @OneToMany(
             mappedBy = "ingredient",
             cascade = CascadeType.ALL,
