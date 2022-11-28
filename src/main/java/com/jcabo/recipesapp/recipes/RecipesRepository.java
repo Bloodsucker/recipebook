@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @RepositoryRestResource(collectionResourceRel = "recipes", path = "recipes")
-interface RecipesRepository extends JpaRepository<Recipe, Long>, RecipesRepositoryCustom {
+public interface RecipesRepository extends JpaRepository<Recipe, Long>, RecipesRepositoryCustom {
 
 
 //    @Query("SELECT r FROM Recipe r WHERE r.vegetarian = :vegetarian")
