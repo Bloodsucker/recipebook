@@ -23,6 +23,8 @@ public class Recipe {
 
     private boolean vegetarian;
 
+    private String name;
+
     @Column(columnDefinition = "TEXT")
     private String instructions;
 
