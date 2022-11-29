@@ -1,19 +1,8 @@
 package com.jcabo.recipesapp;
 
-import com.jcabo.recipesapp.ingredients.Ingredient;
-import com.jcabo.recipesapp.ingredients.IngredientsRepository;
-import com.jcabo.recipesapp.ingredients.RecipesHasIngredients;
-import com.jcabo.recipesapp.recipes.Recipe;
-import com.jcabo.recipesapp.recipes.RecipesRepository;
-import com.jcabo.recipesapp.users.User;
-import com.jcabo.recipesapp.users.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 @EnableJpaRepositories

@@ -1,6 +1,5 @@
 package com.jcabo.recipesapp.users;
 
-import com.fasterxml.jackson.annotation.*;
 import com.jcabo.recipesapp.recipes.Recipe;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,12 +1,12 @@
 package com.jcabo.recipesapp.ingredients;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,14 +18,17 @@ import java.util.List;
 @NaturalIdCache
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @RequiredArgsConstructor
+@NoArgsConstructor
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NaturalId
+    @NonNull
     private String name;
 
+    @NonNull
     private Boolean isVegetarian;
 
     @OneToMany(
@@ -33,5 +36,6 @@ public class Ingredient {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonManagedReference("ingredient")
     private List<RecipesHasIngredients> recipesHasIngredientsList = new ArrayList<>();
 }

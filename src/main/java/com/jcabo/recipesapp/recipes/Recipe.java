@@ -1,17 +1,16 @@
 package com.jcabo.recipesapp.recipes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jcabo.recipesapp.ingredients.Ingredient;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jcabo.recipesapp.ingredients.RecipesHasIngredients;
 import com.jcabo.recipesapp.users.User;
-import lombok.*;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.Cascade;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -35,5 +34,6 @@ public class Recipe {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonManagedReference("recipe")
     private List<RecipesHasIngredients> ingredients = new ArrayList<>();
 }
